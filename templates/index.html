@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A clean, friendly student grade calculator.">
+    <title>GradeGlow — Student Grade Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="page-shell">
+        <nav class="topbar" aria-label="Main navigation">
+            <a class="brand" href="/" aria-label="GradeGlow home">
+                <span class="brand-icon">✦</span>
+                <span>grade<span class="brand-light">glow</span></span>
+            </a>
+            <span class="top-pill"><span class="status-dot"></span> Simple. Fast. Clear.</span>
+        </nav>
+
+        <section class="hero">
+            <div class="eyebrow"><span>✧</span> YOUR RESULTS, MADE SIMPLE</div>
+            <h1>Every score has a <span>story.</span></h1>
+            <p class="hero-copy">Enter your score and see your grade in seconds. No stress, just clarity.</p>
+        </section>
+
+        <section class="calculator-card" aria-labelledby="calculator-title">
+            <div class="card-heading">
+                <div>
+                    <p class="section-kicker">GRADE CALCULATOR</p>
+                    <h2 id="calculator-title">Check your grade</h2>
+                </div>
+                <div class="card-symbol" aria-hidden="true">✎</div>
+            </div>
+
+            <form method="POST" action="/" class="grade-form">
+                <label for="score">Your score <span class="muted">/ 100</span></label>
+                <div class="score-input-wrap">
+                    <input
+                        type="number"
+                        id="score"
+                        name="score"
+                        min="0"
+                        max="100"
+                        step="any"
+                        value="{{ score_value }}"
+                        placeholder="e.g. 78"
+                        required
+                        autofocus
+                        aria-describedby="score-help"
+                    >
+                    <span class="out-of">/ 100</span>
+                </div>
+                <p class="field-help" id="score-help">Use any score from 0 to 100, including decimals.</p>
+
+                {% if error %}
+                    <div class="error-message" role="alert">⚠ {{ error }}</div>
+                {% endif %}
+
+                <button type="submit" class="calculate-button">
+                    Calculate my grade <span aria-hidden="true">↗</span>
+                </button>
+            </form>
+
+            {% if result %}
+            <section class="result-panel {{ result.grade_class }}" aria-live="polite">
+                <div class="result-topline">
+                    <span class="result-label">YOUR RESULT</span>
+                    <span class="result-check">✓ Calculated</span>
+                </div>
+                <div class="result-main">
+                    <div>
+                        <p class="result-caption">Your grade</p>
+                        <div class="grade-letter">{{ result.grade }}</div>
+                    </div>
+                    <div class="score-summary">
+                        <p class="result-caption">Your score</p>
+                        <div class="score-number">{{ result.display_score }}<span>/100</span></div>
+                    </div>
+                </div>
+                <div class="progress-track" role="progressbar"
+                     aria-label="Score percentage" aria-valuemin="0"
+                     aria-valuemax="100" aria-valuenow="{{ result.progress }}">
+                    <div class="progress-fill" style="width: {{ result.progress }}%;"></div>
+                </div>
+                <p class="result-message">{{ result.message }}</p>
+            </section>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">✧</div>
+                <div>
+                    <p class="empty-title">Your result will appear here</p>
+                    <p class="empty-copy">Enter a score above to reveal your grade.</p>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="scale-section">
+            <div class="scale-heading">
+                <div>
+                    <p class="section-kicker">QUICK REFERENCE</p>
+                    <h2>Grade scale</h2>
+                </div>
+                <span class="scale-note">Example scale</span>
+            </div>
+            <div class="scale-grid">
+                <div class="scale-item"><span class="scale-grade scale-a">A</span><span class="scale-range">70–100</span><span class="scale-label">Excellent</span></div>
+                <div class="scale-item"><span class="scale-grade scale-b">B</span><span class="scale-range">60–69</span><span class="scale-label">Very good</span></div>
+                <div class="scale-item"><span class="scale-grade scale-c">C</span><span class="scale-range">50–59</span><span class="scale-label">Good</span></div>
+                <div class="scale-item"><span class="scale-grade scale-d">D</span><span class="scale-range">45–49</span><span class="scale-label">Fair</span></div>
+                <div class="scale-item"><span class="scale-grade scale-e">E</span><span class="scale-range">40–44</span><span class="scale-label">Pass</span></div>
+                <div class="scale-item"><span class="scale-grade scale-f">F</span><span class="scale-range">0–39</span><span class="scale-label">Needs work</span></div>
+            </div>
+            <p class="disclaimer">This is an example grading scale. Change the boundaries in <code>app.py</code> to match your school's rules.</p>
+        </section>
+
+        <footer class="footer">
+            <span>Made for learners, with care <span class="heart">♥</span></span>
+            <span>GRADEGLOW <span class="footer-dot">·</span> STUDENT TOOL</span>
+        </footer>
+    </main>
+</body>
+</html>
